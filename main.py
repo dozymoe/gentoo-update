@@ -9,6 +9,8 @@ from json import load as json_load
 
 ROOT_DIR = os.path.realpath(os.path.dirname(__file__))
 
+os.chdir(ROOT_DIR)
+
 commands = []
 env = {}
 
