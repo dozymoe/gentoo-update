@@ -1,0 +1,28 @@
+/build_rules.yml
+
+
+## waf
+
+/.BUILD
+/.lock-waf_*
+
+
+## python
+
+/.virtualenv
+/python_modules
+
+__pycache__/
+
+*.pyc
+
+
+## vim
+
+*.swo
+*.swp
+
+
+## git
+
+*.orig

@@ -1,0 +1,10 @@
+argh==0.26.2
+beautifulsoup4==4.5.0
+bs4==0.0.1
+pathtools==0.1.2
+pexpect==4.2.0
+ptyprocess==0.5.1
+-e git+https://github.com/dozymoe/PyBuildTool@acbe3402701faf9f78dc0bf72b117af46db5b554#egg=PyBuildTool
+PyYAML==3.11
+requests==2.10.0
+watchdog==0.8.3
