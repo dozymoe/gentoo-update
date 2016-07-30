@@ -60,6 +60,7 @@ system:
                 items: "@world"
                 update: true
                 new_use: true
+                keep_going: true
             token_in:
                 - emerge-devel
                 - installed-packages-fetch
@@ -87,6 +88,7 @@ system:
                 update: true
                 new_use: true
                 deep: true
+                keep_going: true
             token_in: all-packages-fetch
             token_out: all-packages-upgrade
 
