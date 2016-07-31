@@ -185,13 +185,6 @@ class MultipleUplinkPatch(object):
             f.write(response.text.encode('utf8'))
 
 
-def install_rtl8188eu_module():
-    cwd = os.path.realpath(os.curdir)
-    os.chdir('/usr/src/local/rtl8188eu')
-    shell('make && make install')
-    os.chdir(cwd)
-
-
 class Task(BaseTask):
 
     name = tool_name
@@ -275,7 +268,7 @@ class Task(BaseTask):
                         continue
 
                     self.bld.to_log('\nUninstall %s...' % pkg.package_atom)
-                    shell('emerge -c ' + pkg.package_atom)
+                    shell('emerge -c =' + pkg.package_atom)
 
                     self.bld.to_log('\nCleanup /boot...')
                     shell('rm /boot/*%s*' % pkg.kernel_id)
@@ -297,13 +290,15 @@ class Task(BaseTask):
                             reinstall = True
 
                     if reinstall:
-                        shell('emerge ' + pkg.package_atom)
+                        shell('emerge =' + pkg.package_atom)
 
                     self.bld.to_log('\nMake oldconfig in %s...' % pkg.source_directory)
-                    child = pexpect.spawn('make -j1 -C %s oldconfig' % pkg.source_directory)
+                    child = pexpect.spawn('make -j1 -C %s silentoldconfig' % pkg.source_directory)
                     while child.isalive():
                         try:
-                            child.expect(r'\] \(NEW\)')
+                            child.expect([
+                                r'\] \(NEW\)',
+                                r'choice\[\d+-\d+\?\]: (?!\d+)'])
                             print(child.before.decode() + child.after.decode())
                             child.send('\n')
                         except pexpect.exceptions.EOF:
@@ -324,7 +319,8 @@ class Task(BaseTask):
                     shell('make -C %s modules_install' % pkg.source_directory)
                     wireless_modules_path = os.path.join('/lib/modules', pkg.kernel_id,
                             'kernel', 'drivers', 'net', 'wireless')
-                    os.makedirs(wireless_modules_path)
+                    if not os.path.exists(wireless_modules_path):
+                        os.makedirs(wireless_modules_path)
 
                     if for_keep_idx > 0:
                         boot_symlink = os.path.join('/boot', '%s.%s' % (variant, for_keep_idx))
@@ -339,6 +335,4 @@ class Task(BaseTask):
                         self.bld.to_log('\nCreate symlink %s...' % src_symlink)
                         shell('rm ' + src_symlink)
                         shell('ln -s %s %s' % (pkg.source_directory, src_symlink))
-
-        install_rtl8188eu_module()
         return 0
