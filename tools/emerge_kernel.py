@@ -13,7 +13,7 @@ import pexpect
 import re
 from base import Task as BaseTask, make_list
 from shutil import copyfile, Error
-from subprocess import check_output
+from subprocess import check_output, CalledProcessError
 
 tool_name = __name__
 
@@ -99,6 +99,12 @@ class PfKernel(BaseKernel):
 
     def use_patch(self, patch_name):
         return False
+
+
+class RaspberryPiKernel(BaseKernel):
+
+    variant = 'raspi'
+    version_regex = re.compile(r'(?P<major>\d+)\.(?P<minor>\d+)\.(?P<micro>\d+)(?P<extended>[\w-]*)')
 
 
 class HardenedKernel(BaseKernel):
@@ -202,7 +208,14 @@ class Task(BaseTask):
 
 
     def perform(self):
-        packages_ret = check_output('eix --installed --only-names sys-kernel/*-sources', shell=True).decode()
+        try:
+            packages_ret = check_output('eix --installed --only-names sys-kernel/*-sources', shell=True).decode()
+        except CalledProcessError as e:
+            if e.returncode > 0:
+                return 0
+            else:
+                return e.returncode
+
         packages = packages_ret.splitlines()
         self.bld.to_log('\nUpdating kernel packages...')
         if not shell('emerge -uN ' + ' '.join(packages)):

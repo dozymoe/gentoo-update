@@ -66,7 +66,7 @@ class Task(BaseTask):
             exe=executable,
             arg=' '.join(self.args),
         ))
-        if self.ignore_errors:
+        if self.ignore_errors or ret >= 0:
             return 0
         else:
             return ret
