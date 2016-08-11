@@ -11,4 +11,10 @@ class Task(BaseTask):
     name = tool_name
 
     def perform(self):
-        return os.system('python-updater')
+        executable = self.env['%s_BIN' % tool_name.upper()]
+        return os.system(executable)
+
+
+def configure(conf):
+    conf.env['%s_BIN' % tool_name.upper()] = \
+            conf.find_program('python-updater')[0]

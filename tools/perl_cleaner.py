@@ -11,4 +11,10 @@ class Task(BaseTask):
     name = tool_name
 
     def perform(self):
-        return os.system('perl-cleaner')
+        executable = self.env['%s_BIN' % tool_name.upper()]
+        return os.system('%s --all' % executable)
+
+
+def configure(conf):
+    conf.env['%s_BIN' % tool_name.upper()] = \
+            conf.find_program('perl-cleaner')[0]

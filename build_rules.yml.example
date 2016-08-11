@@ -2,11 +2,12 @@ portage:
     emerge:
         options:
             items:
+                - eix
+                - gentoolkit
                 - portage
                 - portage-utils
-                - gentoolkit
+                - python-updater
                 - layman
-                - eix
             update: true
             new_use: true
         file_in: /usr/portage/metadata/timestamp
@@ -51,7 +52,7 @@ eix:
 perl:
     check_tobe_emerged:
         options:
-            name: dev-lang/perl
+            pkgname: dev-lang/perl
         token_in: eix-update
         file_out: flags/check_perl_upgrade
 
@@ -59,7 +60,7 @@ perl:
 python:
     check_tobe_emerged:
         options:
-            name: dev-lang/python
+            pkgname: dev-lang/python
         token_in: eix-update
         file_out: flags/check_python_upgrade
 

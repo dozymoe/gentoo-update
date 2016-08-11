@@ -3,7 +3,7 @@ Check if package was going to be upgraded/emerged.
 
 Options:
 
-    * name : str, None, package atom
+    * pkgname : str, None, package atom
 
 Requirements:
 
@@ -24,7 +24,7 @@ class Task(BaseTask):
     def prepare(self):
         cfg = self.conf
         self.args = ['--only-names', '--upgrade+']
-        self.args.append(cfg['name'])
+        self.args.append(cfg['pkgname'])
 
 
     def perform(self):

@@ -11,4 +11,10 @@ class Task(BaseTask):
     name = tool_name
 
     def perform(self):
-        return os.system('eclean-dist --time-limit=2m')
+        executable = self.env['%s_BIN' % tool_name.upper()]
+        return os.system('%s --time-limit=2m' % executable)
+
+
+def configure(conf):
+    conf.env['%s_BIN' % tool_name.upper()] = \
+            conf.find_program('eclean-dist')[0]
