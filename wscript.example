@@ -33,11 +33,14 @@ def options(opt):
 
 def configure(ctx):
     # load custom tools
+    ctx.load('check_tobe_emerged', tooldir='./tools')
     ctx.load('distfiles_clean', tooldir='./tools')
     ctx.load('eix_update', tooldir='./tools')
     ctx.load('emerge', tooldir='./tools')
     ctx.load('emerge_devel', tooldir='./tools')
     ctx.load('emerge_kernel', tooldir='./tools')
+    ctx.load('perl_cleaner', tooldir='./tools')
+    ctx.load('python_updater', tooldir='./tools')
 
     # load predefined tools from pybuildtool
     #from imp import find_module

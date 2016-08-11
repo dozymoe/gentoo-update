@@ -92,11 +92,21 @@ system:
             token_in: all-packages-fetch
             token_out: all-packages-upgrade
 
+        perl_cleaner:
+            token_in: all-packages-upgrade
+            token_out: perl-cleaner
+
+        python_updater:
+            token_in: all-packages-upgrade
+            token_out: python-updater
+
         clean:
             emerge:
                 options:
                     depclean: true
-                token_in: all-packages-upgrade
+                token_in:
+                    - perl-cleaner
+                    - python-updater
                 token_out: system-upgrade-clean
 
         rebuild:
