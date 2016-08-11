@@ -30,6 +30,40 @@ kernel:
         token_in: emerge-kernel
         token_out: emerge-kernel-modules
 
+
+eix:
+    emerge:
+        options:
+            items: eix
+            update: true
+            new_use: true
+        file_in: /usr/portage/metadata/timestamp
+        raw_file_out: /usr/bin/eix
+        token_out: emerge-eix
+
+    eix_update:
+        token_in:
+            - emerge-eix
+            - emerge-portage
+        token_out: eix-update
+
+
+perl:
+    check_tobe_emerged:
+        options:
+            name: dev-lang/perl
+        token_in: eix-update
+        file_out: flags/check_perl_upgrade
+
+
+python:
+    check_tobe_emerged:
+        options:
+            name: dev-lang/python
+        token_in: eix-update
+        file_out: flags/check_python_upgrade
+
+
 system:
     installed_fetch:
         clean:
@@ -89,22 +123,28 @@ system:
                 new_use: true
                 deep: true
                 keep_going: true
+            file_in:
+                - '@perl:check_tobe_emerged'
+                - '@python:check_tobe_emerged'
             token_in: all-packages-fetch
             token_out: all-packages-upgrade
 
-        perl_cleaner:
-            token_in: all-packages-upgrade
-            token_out: perl-cleaner
-
-        python_updater:
-            token_in: all-packages-upgrade
-            token_out: python-updater
-
         clean:
+            perl_cleaner:
+                file_in: '@perl:check_tobe_emerged'
+                token_in: all-packages-upgrade
+                token_out: perl-cleaner
+
+            python_updater:
+                file_in: '@python:check_tobe_emerged'
+                token_in: all-packages-upgrade
+                token_out: python-updater
+
             emerge:
                 options:
                     depclean: true
                 token_in:
+                    - all-packages-upgrade
                     - perl-cleaner
                     - python-updater
                 token_out: system-upgrade-clean
@@ -115,20 +155,3 @@ system:
                     items: "@preserved-rebuild"
                 token_in: system-upgrade-clean
                 token_out: system-upgrade-rebuild
-
-
-eix:
-    emerge:
-        options:
-            items: eix
-            update: true
-            new_use: true
-        file_in: /usr/portage/metadata/timestamp
-        raw_file_out: /usr/bin/eix
-        token_out: emerge-eix
-
-    eix_update:
-        token_in:
-            - emerge-eix
-            - emerge-portage
-        token_out: eix-update

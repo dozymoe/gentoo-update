@@ -208,7 +208,6 @@ class Task(BaseTask):
 
 
     def perform(self):
-        os.environ['EIX_LIMIT'] = '0'
         try:
             packages_ret = check_output('eix --installed --only-names sys-kernel/*-sources', shell=True).decode()
         except CalledProcessError as e:
