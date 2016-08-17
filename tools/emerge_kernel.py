@@ -311,7 +311,7 @@ class Task(BaseTask):
                         try:
                             child.expect([
                                 r'\] \(NEW\)',
-                                r'choice\[\d+-\d+\?\]: (?!\d+)'])
+                                r'choice\[\d+-\d+\??\]: (?!\d+)'])
                             print(child.before.decode() + child.after.decode())
                             child.send('\n')
                         except pexpect.exceptions.EOF:
