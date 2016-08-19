@@ -330,10 +330,6 @@ class Task(BaseTask):
                     self.bld.to_log('\nMake install in %s...' % pkg.source_directory)
                     shell('make -C %s install' % pkg.source_directory)
                     shell('make -C %s modules_install' % pkg.source_directory)
-                    wireless_modules_path = os.path.join('/lib/modules', pkg.kernel_id,
-                            'kernel', 'drivers', 'net', 'wireless')
-                    if not os.path.exists(wireless_modules_path):
-                        os.makedirs(wireless_modules_path)
 
                     if for_keep_idx > 0:
                         boot_symlink = os.path.join('/boot', '%s.%s' % (variant, for_keep_idx))
